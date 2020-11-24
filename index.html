@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+<script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+<script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+<script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+
+<!--<script src="/ihh/babylon/babylon.max.js"></script>-->
+<script src="/ihh/js/cannon.js"></script>
+<script src="/ihh/js/functions.js"></script>
+
+<!--<script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>-->
+<!--<script src="/ihh/babylon/loaders/babylonjs.loaders.min.js"></script>-->
+<!--<script src="/ihh/babylon/gui/babylon.gui.min.js"></script>-->
+<!--<script src="/babylon/materialsLibrary/babylonjs.materials.min.js"></script>
+<script src="/babylon/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+<script src="/babylon/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+<script src="/babylon/serializers/babylonjs.serializers.min.js"></script>
+<script src="/babylon//nodeEditor/babylon.nodeEditor.js"></script>-->
+<link rel="stylesheet" type="text/css" href="/ihh/css/fearinventory.css">
+<link rel="stylesheet" type="text/css" href="/ihh/css/inventory.css">
+<link rel="stylesheet" type="text/css" href="/ihh/css/icons.css">
+<style>
+:root {
+    --red: #ce0604;
+    --orange: #ff6600;
+    --yellow: #ffff00;
+    --green: #009933;
+    --blue: #0052cc;
+    --indigo: #9a00ce;
+    --violet: #f080ff;
+    --darkred: #990000;
+    --darkblue: #000080;
+    --dspurple: #8031bc;
+    --dsbgcolor: #1f1f24;
+    --dsnavcolor: #2d2e39;
+    
+}
+
+
+
+h1.dsfont1 {
+font-family: Luminari, Arial, sans-serif;
+font-weight:normal;
+font-style:normal;
+color: var(--dspurple);
+text-align: center;
+}
+
+        html, body {
+            overflow: hidden;
+            width   : 100%;
+            height  : 100%;
+            margin  : 0;
+            padding : 0;
+        }
+
+        #renderCanvas {
+            width   : 100%;
+            height  : 100%;
+    
+            touch-action: none;
+        }
+
+
+
+
+
+
+        #menu {
+        	position: absolute;
+        	left: 10px;
+        	top: 10px;
+        	display: none;
+        	width: 500px;
+        	height: 500px;
+        	padding-left: 20px;
+        	background-color: 	rgb(26, 0, 26,.5);
+        }
+        #menu h1 {
+        	color: green;
+        }
+        #menu p {
+        	color: white;
+        }
+        .box {
+        	height:50px; width:50px;
+        	border:2px solid black;
+        }
+
+      
+        #message {
+        	opacity: 0;
+        	transition: 1s opacity;
+        	position: absolute;
+        	top: 77%;
+        	/*left: 30%;*/
+        	left: 0;
+        	right: 0;
+        
+    		text-align: center;
+    		margin-left: auto;
+    		margin-right: auto;
+        }
+        #message.show {
+        
+        	opacity: 1;
+        	transition: 1s opacity;
+
+        }
+        #message .message-container {
+        	height: 50px;
+        	line-height: 20px;
+        	width: 50%;
+
+
+        	text-align: center;
+    		margin-left: auto;
+    		margin-right: auto;
+    		margin-top: auto;
+    		border: 1px solid var(--dspurple);
+    		border-radius: 20px;
+            background-color: 	rgb(26, 0, 26,.9);
+        	color: white;
+             font-family: Luminari, Arial, sans-serif;
+        }
+   		.babylonUnmuteIcon {
+   			background-color: var(--dspurple) !important;
+   			border-radius: 15px;
+   		}
+
+
+
+		#fear-bar-container {
+		margin-left: 5px;
+		width: 200px;
+		background-color: inherit;
+		border: 1px solid red;
+		border-radius: 15px;
+		}
+
+		#fear-bar {
+		width: 0%;
+		height: 15px;
+		border-radius: 15px;
+		background-color: red;
+		}
+
+		.flex-row
+		{
+		margin: 0;
+		padding: 5px;
+		width: 100%;
+
+		}
+		.flex-row .flex-col
+		{
+
+		  	align-items: center;
+  			justify-content: center;
+			display: inline-flex;
+		}
+		.icon-group
+		{
+			opacity: .6;
+			transition: 1s opacity;
+			padding: 2px;
+			border-radius: 15px;
+			background-color: rgb(34, 0, 34,.9);
+		
+		}
+			.icon-group.active
+		{
+			opacity: 1;
+			transition: 1s opacity;
+
+		}
+
+
+		.hud-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.hud-icon .tooltiptext {
+  visibility: hidden;
+  display: none;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -40px;
+  left: -45px;
+}
+
+.hud-icon .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.hud-icon:hover .tooltiptext {
+  visibility: visible;
+  display: block;
+}
+.player-hud-spacer
+{
+width: 40px;
+}
+
+#fear-types-total
+{
+ color: red;
+}
+#fear-types
+{
+	border: 1px solid red;
+width: 55px;
+}
+#crystals-display
+{
+	border: 1px solid var(--dspurple);	
+	width:120px;
+  margin-left: -5px;
+}
+
+#player-hud-top-bar{
+	height: 30px;
+}
+#player-info-display
+{
+	width: 450px;
+}
+
+#prompt-count-down
+{
+		opacity: 0;
+        	transition: 1s opacity;
+        	position: absolute;
+        	top: 72%;
+        	/*left: 30%;*/
+        	left: 0;
+        	right: 0;
+        	width: 300px;
+    		text-align: center;
+    		margin-left: auto;
+    		margin-right: auto;
+    		border-radius: 15px;
+    		background-color: rgb(34, 0, 34,.9);
+}
+#prompt-count-down.show
+{
+		opacity: 1;
+        transition: 1s opacity;
+
+}
+
+#prompt-count-bar-containerr {
+width: 300px;
+background-color: inherit;
+border: 1px solid rgb(34, 0, 34,.9);
+border-radius: 15px;
+}
+
+#prompt-count-bar {
+
+height: 15px;
+border-radius: 15px;
+background-color: var(--dspurple);
+}
+
+button.player-hud-button
+{
+  border: none;
+  padding: 0px;
+
+  margin-right: 20px;
+  background-color: inherit;
+}
+
+
+
+
+#playerhud-buttons-bar {
+
+  vertical-align: middle;
+}
+
+
+  #player-hud {
+          border-top-left-radius: 30px;
+          border-top-right-radius: 30px;
+          border-top: 3px solid var(--dspurple);
+          width: 280px;
+          height: 160px;
+          display: flex;
+          position: absolute;
+          top: 92%;
+          left: 40%;
+          padding: 2px;
+          background-color:   rgb(26, 0, 26,.9);
+          color: var(--dspurple);
+          font-family: Luminari, Arial, sans-serif;
+        }
+
+  #team-battle-bar {
+          border-top-left-radius: 30px;
+          border-top-right-radius: 30px;
+          border-top: 3px solid var(--dspurple);
+          width: 100%;
+          height: 240px;
+          display: flex;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color:   rgb(26, 0, 26,1);
+          color: var(--dspurple);
+          font-family: Luminari, Arial, sans-serif;
+        }
+
+.team-bar{
+   display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 50px 125px 125px 125px 125px;
+}
+.team-bar-member
+{
+ text-align: center;
+ color: white; 
+ margin-left: 50px;
+}
+.team-bar-member img {
+  padding: 0px;
+  margin: 0;
+  width: 50px;
+  height: 50px;
+}
+.team-member-name
+{
+  margin-top: -10px;
+}
+.team-member-love-container
+{
+  margin-top: -10px;
+}
+.team-member-mana-container
+{
+    margin-top: -10px;
+}
+.team-member-love-label 
+{
+margin-top: 75px;
+margin-left: 24px;
+color: var(--green);
+}
+.team-member-mana-label
+{
+margin-top: -12px;
+margin-left: 24px;
+color: var(--violet);
+}
+
+
+.team-battle-bar-grid
+{
+     display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 600px 300px 450px;
+}
+.battle-options-grid {
+      display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 150px 150px; 
+}
+.battle-option
+{
+  width: 148px;
+  height: 65px;
+  color: white;
+  text-align: center;
+  vertical-align: center;
+  border: 2px solid var(--dspurple);
+  opacity: .4;
+  transition: opacity .05s;
+background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+}
+.battle-option.active
+{
+  z-index: 999;
+  opacity: 1;
+  transition: opacity .05s;
+}
+.battle-option.selected
+{
+  border: 2px solid gold;
+  z-index: 999;
+  opacity: 1;
+  transition: border .05s;
+}
+.battle-option p
+{
+margin-top: 25px;
+
+}
+
+
+.team-member-data-label {
+    margin-top: 10px;
+}
+
+
+    .fear-type-lovebar-container {
+
+    width: 100px;
+    background-color: inherit;
+    border: 1px solid red;
+    border-radius: 15px;
+
+    }
+    .fear-type-lovebar{
+      width: 0%;
+    height: 6px;
+    border-radius: 15px;
+    background-color: red;   
+    }
+
+    .battle-fear-types-love-container {
+      color: white;
+      font-size: 12px;
+          margin-left: 20px;
+    }
+    .battle-fear-types-grid {
+      display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 150px 150px 150px; 
+
+    }
+
+#cast-spell-menu
+{
+  position: absolute;    
+  top:20px;
+  display: none;
+  width: 805px;
+  height: 70%;
+  padding-left: 20px;
+  background-color:   rgb(26, 0, 26,.95);
+  border-radius: 15px;
+  border: 1px solid var(--dspurple);
+}
+
+#cast-spell-menu.show
+{
+  display: block;
+}
+
+.cast-spell-list
+{
+  list-style: none;
+  margin-left: -50px;
+  width: 800px;
+  display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 200px 200px 200px 200px;
+}
+
+.cast-spell-list li
+{
+  padding: 5px;
+  width: 200px;
+  height: 50px;
+  border: 1px solid #595859;
+  opacity: .8;
+  background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+  border: 2px solid #1a1a1a;
+  transition: opacity .5s;
+}
+
+.cast-spell-list li.active
+{
+  border: 2px solid gold;
+  z-index: 999;
+  opacity: 1;
+  transition: opacity .2s;
+}
+
+
+.spell-title
+{
+  color: white;
+  font-size: 15px;
+}
+.spell-loveimpact
+{
+  color: white;
+  font-size: 12px;
+}
+.spell-manause
+{
+  color: white;
+  font-size: 12px;
+}
+.spell-info-row
+{
+display: flex;
+}
+.spell-level-label
+{
+  margin-left: 5px;
+  color: white;
+}
+.spell-light-frequency-label
+{
+  margin-left: 5px;
+  color: white;
+}
+
+
+
+.touchcontrolsdisplaytop
+{
+  position:absolute;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  
+}
+.touchcontrolsdisplaytop .topleft
+{
+  width: 50%;
+  height: 50%;
+  background-color: rgba(12, 235, 82, 0.5);
+}
+.touchcontrolsdisplaytop .topright
+{
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  background-color: rgba(235, 153, 12, 0.5);
+}
+.touchcontrolsdisplaybottom
+{
+  position:absolute;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  display: flex;
+  
+}
+.touchcontrolsdisplaybottom .bottomleft
+{
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  background-color: rgba(235, 12, 217, 0.5);
+}
+.touchcontrolsdisplaybottom .bottomright
+{
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  background-color: rgba(235, 12, 12, 0.5);
+}
+.leftright
+{
+position: absolute;
+z-index:  9999;
+height: 40%;
+width: 100%;
+top: 30%;
+background-color: rgba(176, 235, 12, 0.5);
+}
+.updown
+{
+  position: absolute;
+z-index:  9999;
+width: 40%;
+height: 100%;
+left: 30%;
+background-color: rgba(176, 235, 12, 0.5);
+}
+    </style>
+
+
+
+</head>
+<body id="body">
+
+<!--
+<div class="leftright"></div>
+<div class="updown"></div>
+<div class="touchcontrolsdisplaytop">
+<div class="topleft"></div>
+<div class="topright"></div>
+</div>
+<div class="touchcontrolsdisplaybottom">
+  <div class="bottomleft"></div>
+  <div class="bottomright"></div>
+  </div>-->
+
+<div id='inventory'>
+<div id='exit-inventory' class='inventory-exit-button'><img src='/ihh/assets/UI/inventory/exit.png'/></div>
+<h1 class='dsfont1'>Inventory</h1>
+<div class="inventory-display">
+<ul id='inventory-type-list' class='inventory-type-menu'>
+  <li data-id='0' class='selected'><img src='/ihh//assets/UI/inventory/types/lightweapons.png'/></li>
+  <li data-id='1' ><img src='/ihh//assets/UI/inventory/types/equitment.png'/></li>
+  <li data-id='2' ><img src='/ihh//assets/UI/inventory/types/potions.png'/></li>
+  <li data-id='3' ><img src='/ihh//assets/UI/inventory/types/jewls.png'/></li>
+  <li data-id='4' ><img src='/ihh//assets/UI/inventory/types/crafting.png'/></li>
+</ul>
+
+<ul  id="lightweapons-inventory-list" class="inventory-list">
+<li class='active itemslot' data-slot="0">
+  <div class="inventory-item-grid">
+<div class="inventory-lightweapons-swords-blue invetory-list-item-image">
+</div>
+<div class="inventory-list-item-info">
+<!--<strong>Blue Light Sword</strong>-->
+<!--<ul class='inventory-item-stat-effects'>
+<li class='inventory-stat-effect-display'><span class='stats-strength-icon'></span>+50</li>
+<li class='inventory-stat-effect-display'><span class='stats-accuracy-icon'></span>+5</li>
+<li class='inventory-stat-effect-display'><span class='stats-flexibility-icon'></span>-5</li>
+</ul>-->
+
+</div>
+</div>
+</li>
+<li  class='itemslot' data-slot="1"></li>
+<li class='itemslot' data-slot="2"></li>
+<li class='itemslot' data-slot="3"></li>
+<li class='itemslot' data-slot="4"></li>
+<li class='itemslot' data-slot="5"></li>
+<li class='itemslot' data-slot="6"></li>
+<li class='itemslot' data-slot="7"></li>
+<li class='itemslot' data-slot="8"></li>
+<li class='itemslot' data-slot="9"></li>
+<li class='itemslot' data-slot="10"></li>
+<li class='itemslot' data-slot="11"></li>
+<li class='itemslot' data-slot="12"></li>
+<li class='itemslot' data-slot="13"></li>
+<li class='itemslot' data-slot="14"></li>
+<li class='itemslot' data-slot="15"></li>
+<li class='itemslot' data-slot="16"></li>
+<li class='itemslot' data-slot="17"></li>
+<li class='itemslot' data-slot="18"></li>
+<li class='itemslot' data-slot="19"></li>
+<li class='itemslot' data-slot="20"></li>
+<li class='itemslot' data-slot="21"></li>
+<li class='itemslot' data-slot="22"></li>
+<li class='itemslot' data-slot="23"></li>
+</ul>
+<ul id="equitment-inventory-list" class="inventory-list hidden">
+<li data-slot="1"></li>
+<li data-slot="2"></li>
+<li data-slot="3"></li>
+<li data-slot="4"></li>
+<li data-slot="5"></li>
+<li data-slot="6"></li>
+<li data-slot="7"></li>
+<li data-slot="8"></li>
+<li data-slot="9"></li>
+<li data-slot="10"></li>
+<li data-slot="11"></li>
+<li data-slot="12"></li>
+<li data-slot="13"></li>
+<li data-slot="14"></li>
+<li data-slot="15"></li>
+<li data-slot="16"></li>
+<li data-slot="17"></li>
+<li data-slot="18"></li>
+<li data-slot="19"></li>
+<li data-slot="20"></li>
+<li data-slot="21"></li>
+<li data-slot="22"></li>
+<li data-slot="23"></li>
+<li data-slot="24"></li>
+</ul>
+<ul id="potions-inventory-list" class="inventory-list hidden">
+<li data-slot="1"></li>
+<li data-slot="2"></li>
+<li data-slot="3"></li>
+<li data-slot="4"></li>
+<li data-slot="5"></li>
+<li data-slot="6"></li>
+<li data-slot="7"></li>
+<li data-slot="8"></li>
+<li data-slot="9"></li>
+<li data-slot="10"></li>
+<li data-slot="11"></li>
+<li data-slot="12"></li>
+<li data-slot="13"></li>
+<li data-slot="14"></li>
+<li data-slot="15"></li>
+<li data-slot="16"></li>
+<li data-slot="17"></li>
+<li data-slot="18"></li>
+<li data-slot="19"></li>
+<li data-slot="20"></li>
+<li data-slot="21"></li>
+<li data-slot="22"></li>
+<li data-slot="23"></li>
+<li data-slot="24"></li>
+</ul>
+<ul id="jewls-inventory-list" class="inventory-list hidden">
+<li data-slot="1"></li>
+<li data-slot="2"></li>
+<li data-slot="3"></li>
+<li data-slot="4"></li>
+<li data-slot="5"></li>
+<li data-slot="6"></li>
+<li data-slot="7"></li>
+<li data-slot="8"></li>
+<li data-slot="9"></li>
+<li data-slot="10"></li>
+<li data-slot="11"></li>
+<li data-slot="12"></li>
+<li data-slot="13"></li>
+<li data-slot="14"></li>
+<li data-slot="15"></li>
+<li data-slot="16"></li>
+<li data-slot="17"></li>
+<li data-slot="18"></li>
+<li data-slot="19"></li>
+<li data-slot="20"></li>
+<li data-slot="21"></li>
+<li data-slot="22"></li>
+<li data-slot="23"></li>
+<li data-slot="24"></li>
+</ul>
+<ul id="crafting-inventory-list" class="inventory-list hidden">
+<li data-slot="1"></li>
+<li data-slot="2"></li>
+<li data-slot="3"></li>
+<li data-slot="4"></li>
+<li data-slot="5"></li>
+<li data-slot="6"></li>
+<li data-slot="7"></li>
+<li data-slot="8"></li>
+<li data-slot="9"></li>
+<li data-slot="10"></li>
+<li data-slot="11"></li>
+<li data-slot="12"></li>
+<li data-slot="13"></li>
+<li data-slot="14"></li>
+<li data-slot="15"></li>
+<li data-slot="16"></li>
+<li data-slot="17"></li>
+<li data-slot="18"></li>
+<li data-slot="19"></li>
+<li data-slot="20"></li>
+<li data-slot="21"></li>
+<li data-slot="22"></li>
+<li data-slot="23"></li>
+<li data-slot="24"></li>
+</ul>
+</div>
+<ul id='inventory-pagination-list' class='inventory-pagination'>
+  <li data-id='0'><img src='/ihh/assets/UI/inventory/leftarrow.png'/></li>
+  <li data-id='1'><img src='/ihh/assets/UI/inventory/rightarrow.png'/></li>
+</ul>
+</div>
+
+
+
+
+<div id='cast-spell-menu'>
+<h1 class='dsfont1'>Cast Spell</h1>
+
+<ul id='cast-spell-list' class='cast-spell-list'>
+
+<li data-name="spark" >
+
+<div class='spell-title'>Spark</div>
+<div class='spell-info-row'>
+<div class='spell-loveimpact'><span class='small-loveimpact-icon'></span>5</div>
+<div class='spell-level-label'>Level: <spam class='spell-level'>1</spam></div>
+</div>
+<div class='spell-info-row'>
+<div class='spell-manause'><span class='small-mana-icon'></span>3</div>
+<div class='spell-light-frequency-label'><span class='frequency-icon-white'></span></div>
+</div>
+
+</li>
+<li data-slot="2">
+<div class='spell-title'>Ultraviolet</div>
+<div class='spell-info-row'>
+<div class='spell-loveimpact'><span class='small-loveimpact-icon'></span>5</div>
+<div class='spell-level-label'>Level: <spam class='spell-level'>1</spam></div>
+</div>
+<div class='spell-info-row'>
+<div class='spell-manause'><span class='small-mana-icon'></span>3</div>
+<div class='spell-light-frequency-label'><span class='frequency-icon-ultraviolet'></span></div>
+
+</div>
+</li>
+
+<li data-slot="2">
+<div class='spell-title'>Small Sun</div>
+<div class='spell-info-row'>
+<div class='spell-loveimpact'><span class='small-loveimpact-icon'></span>5</div>
+<div class='spell-level-label'>Level: <spam class='spell-level'>1</spam></div>
+</div>
+<div class='spell-info-row'>
+<div class='spell-manause'><span class='small-mana-icon'></span>3</div>
+<div class='spell-light-frequency-label'><span class='frequency-icon-red'></span><span class='frequency-icon-orange'></span></div>
+
+</div>
+</li>
+<li data-slot="2">
+
+<div class='spell-title'>Small Rainbow</div>
+<div class='spell-info-row'>
+<div class='spell-loveimpact'><span class='small-loveimpact-icon'></span>5</div>
+<div class='spell-level-label'>Level: <spam class='spell-level'>1</spam></div>
+</div>
+<div class='spell-info-row'>
+<div class='spell-manause'><span class='small-mana-icon'></span>3</div>
+<div class='spell-light-frequency-label'>
+<span class='frequency-icon-red'></span><span class='frequency-icon-orange'></span><span class='frequency-icon-yellow'></span><span class='frequency-icon-green'></span><span class='frequency-icon-blue'></span><span class='frequency-icon-ultraviolet'></span><span class='frequency-icon-pink'></span>
+</div>
+</div>
+
+</li>
+</ul>
+
+
+</div>
+
+
+
+
+<div id='team-battle-bar'>
+  <div class='team-battle-bar-grid'>
+      <div id='team-stats-battle-info-display' class='team-bar'>
+             
+      </div>
+
+      <div class='battle-options-container'>
+        <div class='battle-options-grid'>
+            <div data-id='0' class='battle-option'><img src='assets/UI/battlebar/useforce.jpg'/></div>
+            <div data-id='1' class='battle-option'><img src='assets/UI/battlebar/castspell.jpg'/></div>
+            <div data-id='2' class='battle-option'><img src='assets/UI/battlebar/summon.jpg'/></div>
+            <div data-id='3' class='battle-option'><img src='assets/UI/battlebar/useitem.jpg'/></div>
+            <div data-id='4' class='battle-option'><p class='option-text'>Try To Flee</p></div>
+            <div data-id='5' class='battle-option'><p class='option-text'>Fear Type Stats</p></div>
+        </div>
+      </div>
+
+      <div class='battle-fear-types-love-container'>
+        <div id='fear-types-battle-info-display' class='battle-fear-types-grid'>
+            <div >
+              <p>Corrupted Purple Crystal</p>
+                
+                  <div class="fear-type-lovebar-container">
+                  <div data-width='0' data-id='0' class="fear-type-lovebar"></div>
+                  </div>
+             
+            </div>
+            <div>
+              
+            </div>
+            <div>
+              
+            </div>
+          
+        </div>
+
+      </div>
+</div>
+
+</div>
+
+<div id='fear-type-inventory-menu'>
+<h1 class='dsfont1'>Fear Inventory</h1>
+<ul id='fear-type-inventory-list' class='fear-invetory-list'>
+<li data-slot="1"></li>
+<li data-slot="2"></li>
+<li data-slot="3"></li>
+<li data-slot="4"></li>
+<li data-slot="5"></li>
+<li data-slot="6"></li>
+<li data-slot="7"></li>
+<li data-slot="8"></li>
+<li data-slot="9"></li>
+<li data-slot="10"></li>
+<li data-slot="11"></li>
+<li data-slot="12"></li>
+<li data-slot="13"></li>
+<li data-slot="14"></li>
+<li data-slot="15"></li>
+<li data-slot="16"></li>
+<li data-slot="17"></li>
+<li data-slot="18"></li>
+<li data-slot="19"></li>
+<li data-slot="20"></li>
+<li data-slot="21"></li>
+</ul>
+
+</div>
+
+
+	<div id='menu'>
+		<h1>Hello</h1>
+		<p>This is some menu text.</p>
+		<div class='box'>
+		</div>
+	</div>
+	<div id='prompt-count-down'>
+	<div id="prompt-count-bar-container">
+						<div data-width='0' id="prompt-count-bar"></div>
+		</div>
+	</div>
+	<div class='' id='message'>
+		<div class='message-container'>
+		<p id='message-text'>Hello from DivineStar.</p>
+		</div>
+	</div>
+
+<div class='flex' id='player-hud'>
+		
+
+
+		<div id='player-info-display'>
+		<div class='flex-row' id='player-hud-top-bar'>
+
+
+			<div class='flex-col'>
+		
+				<div id='fear-types' class='icon-group'>
+					<div class='hud-icon flex-col' >
+						<span class="tooltiptext">Tooltip text</span>
+						<img src='assets/UI/icons/playerhud/fear_icon.png'/>
+					</div>
+					<div class='flex-col'>
+						<span id='fear-types-total'>0</span>
+					</div>
+				</div>
+				<div class='flex-col'>
+					<div id="fear-bar-container">
+						<div data-width='0' id="fear-bar"></div>
+					</div>
+				</div>
+			</div>
+
+      
+
+
+				<div class='flex-col'>
+ 
+					<div id='crystals-display'class='icon-group'>
+						<div class='hud-icon flex-col'>
+							<span class="tooltiptext">Crystals Total</span>
+							<img src='assets/UI/icons/playerhud/crystal_icon.png'/>
+						</div>
+						<div class='flex-col'>
+							<span id='cystals-display-total'>0</span>
+						</div>
+					</div>
+
+				</div>
+      <div class="flex-col" id="playerhud-buttons-bar">
+			<div class="flex-col">
+					<div class="hud-icon" >
+						<span class="tooltiptext">Fear Type Inventory</span>
+						<button class="player-hud-button" id="fear-invetory-player-hud">
+						<img src="assets/UI/icons/playerhud/fear_inventory_icon.png"/>
+						</button>
+					</div>
+			</div>
+			<div class="flex-col">
+					<div class='hud-icon' >
+						<span class="tooltiptext">Tooltip text</span>
+            <button class='player-hud-button' id='invetory-player-hud'>
+						<img src='assets/UI/icons/playerhud/fear_inventory_icon.png'/>
+          </button>
+					</div>
+			</div>
+			<div class='flex-col '>
+					<div class='hud-icon' >
+						<span class="tooltiptext">Tooltip text</span>
+            <button class='player-hud-button' id='settings-player-hud'>
+						<img src='assets/UI/icons/playerhud/fear_inventory_icon.png'/>
+            </button>
+					</div>
+      </div>
+      
+      </div>
+
+			</div>
+			</div>
+
+
+
+		<div  id='team-info-display'>
+			<!--<div class='flex-row'>
+
+				<div class='flex-col'>
+							<img src='/assets/UI/players/purplestar.png'/>
+							<p>Eiael</p>
+				</div>
+			</div>
+
+		</div>-->
+
+
+			</div>
+
+
+		</div>
+	</div>
+
+
+
+
+
+
+    <canvas id="renderCanvas"></canvas>
+
+</body>
+<script type='module'> 
+
+</script>
+
+<script type='module' >
+
+
+import {AssetManager} from './js/AssetManager.js'
+import {SceneManager} from './js/SceneManager.js'
+import {PlayerObject} from './js/player/PlayerObject.js'
+import {Messages} from './js/UI/Messages.js'
+import {PlayerHUD} from './js/UI/PlayerHUD.js'
+import {TeamData} from './js/Data/TeamData.js'
+import {FearTypes} from './js/Fear/FearTypes.js'
+import {DataManager} from './js/Data/DataManager.js';
+import {TeamObject} from './js/Team/TeamObject.js';
+import {BattleManager} from './js/Battles/BattleManager.js';
+import {BattleLoader} from './js/Battles/BattleLoader.js';
+//import {PlayerSesnor} from './js/player/PlayerSensor.js'
+
+
+
+
+
+
+function animate_player_hud()
+{
+  //console.log("animate player hud");
+var color1 = "ec2d2d",color2 = "eca62de7",color3="f9e50de7",color4="2ad24be7",color5="4d34a7e7",color6="a134a7e7",color7="e576ebe7";
+var duration = 1500;
+var id = "player-hud";
+
+animate(id,color1,color2,duration);
+setTimeout(() => {
+  animate(id,color2,color3,duration);
+}, duration*2);
+setTimeout(() => {
+  animate(id,color3,color4,duration);
+}, duration*3);
+setTimeout(() => {
+  animate(id,color4,color5,duration);
+}, duration*4);
+setTimeout(() => {
+  animate(id,color5,color6,duration);
+}, duration*5);
+setTimeout(() => {
+  animate(id,color6,color7,duration);
+}, duration*6);
+setTimeout(() => {
+  animate(id,color7,color1,duration);
+}, duration*7);
+setTimeout(() => {
+  animate_player_hud();
+}, duration*8);
+}
+
+
+var dataManager = new DataManager();
+
+
+
+var teamdata = new TeamData();
+
+var player = new PlayerObject();
+
+var messages = new Messages();
+
+var playerhud = new PlayerHUD();
+
+player.set_player_hud(playerhud);
+
+playerhud.set_data_manager(dataManager);
+teamdata.set_player_hud(playerhud);
+
+var fear_types = new FearTypes(dataManager);
+var team = new TeamObject(teamdata,dataManager);
+var assettManager = new AssetManager(dataManager,team,fear_types);
+var sceneManager = new SceneManager(assettManager,dataManager,teamdata);
+var battleManager = new BattleManager(sceneManager);
+var battleLoader = new BattleLoader(sceneManager,dataManager,teamdata,battleManager,team,fear_types,playerhud);
+
+  sceneManager.set_player_hud(playerhud);
+
+ // animate_player_hud();
+
+messages.showAndHideMessage('Hello from Divine Star');
+
+//messages.setAndShowMessage('Hello from Divine Star');
+
+window.addEventListener('DOMContentLoaded', function(){
+            // get the canvas DOM element
+            var canvas = document.getElementById('renderCanvas');
+
+            // load the 3D engine
+            var engine = new BABYLON.Engine(canvas, true);
+
+            sceneManager.set_game_engine(engine);
+            sceneManager.set_game_canvas(canvas);
+
+var createScene = function () {
+
+
+
+
+
+	//var sensor = new PlayerSesnor();
+	//sensor.callMe();
+    // Setup the scene
+    var scene = new BABYLON.Scene(engine);
+ 
+scene.clearColor = new BABYLON.Color3(0, 0, 0);
+    var gravityVector = new BABYLON.Vector3(0,-9.8, 0);
+	var physicsPlugin = new BABYLON.CannonJSPlugin();
+	scene.enablePhysics(gravityVector, physicsPlugin);
+    scene.collisionsEnabled = true;
+    playerhud.set_scene(scene);
+window.addEventListener("click", function () {
+   // We try to pick an object
+   
+
+});
+  
+
+
+
+  //root camera parent that handles positioning of the camera to follow the player
+  var _camRoot = new BABYLON.TransformNode("root");
+  _camRoot.position = new BABYLON.Vector3(0, 0, 0); //initialized at (0,0,0)
+
+  //to face the player from behind (180 degrees)
+  _camRoot.rotation = new BABYLON.Vector3(0, 0, 0);
+  
+  
+  //rotations along the x-axis (up/down tilting)
+  var yTilt = new BABYLON.TransformNode("ytilt");
+  //adjustments to camera view to point down at our player
+  yTilt.rotation =  new BABYLON.Vector3(.8, 0, 0);
+  console.log(yTilt.rotation);
+
+  yTilt.parent = _camRoot;
+  //our actual camera that's pointing at our root's position
+  
+   var camera = new BABYLON.UniversalCamera("cam", new BABYLON.Vector3(0, 0, 0), scene);
+  //this.camera.lockedTarget =  this._camRoot.position;
+  camera.fov = 0.47350045992678597;
+  camera.parent = yTilt;
+
+
+  scene.activeCamera = camera;
+  camera.attachControl(canvas, true);
+
+//scene.debugLayer.show();
+   // var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+  //  camera.attachControl(canvas, true);
+ //   camera.setTarget(new BABYLON.Vector3(0, 0, 0));
+	
+ //camera.attachControl(canvas, true);
+
+/*
+    var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 5, -10), scene);
+    camera.radius = 10; // how far from the object to follow
+    camera.heightOffset = 1; // how high above the object to place the camera
+
+    camera.cameraAcceleration = 0; // how fast to move
+    camera.maxCameraSpeed = 1; // speed limit
+  
+  */
+   
+
+
+//var blackandwhite = new BABYLON.BlackAndWhitePostProcess("bandw", 1, camera);
+//console.log(blackandwhite.degree = .4);
+ //new BABYLON.FxaaPostProcess("fxaa", 1.0, camera);
+ /*
+ var pipeline = new BABYLON.DefaultRenderingPipeline(
+    "defaultPipeline", // The name of the pipeline
+    true, // Do you want the pipeline to use HDR texture?
+    scene, // The scene instance
+    [camera] // The list of cameras to be attached to
+);
+
+pipeline.samples = 8;
+pipeline.fxaaEnabled = true;
+pipeline.grainEnabled = false;
+        if (pipeline.grainEnabled) {
+          pipeline.grain.adaptScaleToCurrentViewport = false; // false by default
+          pipeline.grain.animated = true; // false by default
+          pipeline.grain.intensity = 5; // 30 by default
+        }
+     camera.attachControl(canvas, false);
+*/
+
+
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), scene);
+    light.intensity = .75;
+    //engine.enableOfflineSuppourt = false;
+
+ 
+
+
+   
+
+  var model = false;
+    BABYLON.SceneLoader.ImportMesh("","./assets/leveltest/", "level.babylon", scene, function (meshes,particles,skeltons) {
+ 
+      var materials = [];
+
+
+var meshlength = meshes.length;
+
+
+meshes.forEach(function(mesh,index){
+ 
+  
+
+  if(mesh.name.includes("physics") ) {
+    mesh.isVisible = false;
+    mesh.isPickable = true;
+    mesh.checkCollisions = true;
+    //console.log(mesh.name);
+  } else if (mesh.name.includes("pillar") || mesh.name.includes("cube")) {
+    mesh.isPickable = true;
+    mesh.checkCollisions = true;
+  } else {
+  //  console.log(mesh.name);
+   mesh.isPickable = false;
+  mesh.checkCollisions = false;
+  }
+
+    if(meshlength >= index - 1) {
+        model = true;
+    }
+    
+    var material = mesh.material;
+
+
+      //  console.log(material);
+
+if(material.albedoTexture != null ) {
+var turl = material.albedoTexture.url;
+
+if(materials[turl] == null) {
+
+
+
+ material.samplingMode = BABYLON.Texture.NEAREST_SAMPLINGMODE
+ //console.log("UPDATED SAMPLING MODE");
+
+
+
+ var texture = new BABYLON.Texture(turl, scene);
+
+ texture.onLoadObservable.add(() => {
+texture.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST_MIPLINEAR);
+//console.log("change sampling mode")
+});
+ texture.anisotropicFilteringLevel = 0;
+ var mat = new BABYLON.StandardMaterial("groundmat", scene);
+ mat.diffuseTexture = texture;
+ mat.samplingMode = BABYLON.Texture.NEAREST_SAMPLINGMODE
+ mat.diffuseTexture.hasAlpha = true;
+ mat.backFaceCulling = true;
+ mesh.material = mat;
+
+
+ materials[turl] = mat;
+} else {
+//console.log('loaded from texture from array')
+mesh.material = materials[turl];
+}
+}
+
+
+});
+
+
+
+        
+    });
+
+
+ 
+    var inputMap ={};
+ 
+ 
+
+
+
+
+
+  // Fountain object
+
+assettManager.set_scene(scene);
+assettManager.load_soudnds();
+
+
+player.set_team_data(teamdata);
+scene.interactive_objects = new Array();
+
+
+
+
+
+fear_types.set_scene(scene);
+fear_types.set_player(player);
+fear_types.set_asset_manager(assettManager);
+fear_types.set_team_data(teamdata);
+player.set_scene_manager(sceneManager);
+sceneManager.set_player(player);
+fear_types.create(0,'fearorb',new BABYLON.Vector3(10, 3, -3),dataManager.get_data_value('fearorbtypes','7thoctavepurple'));
+
+var cylinder2 = BABYLON.MeshBuilder.CreateCylinder("test", {height: .8, diameter: .5}, scene);
+    cylinder2.position = new BABYLON.Vector3(.5, 1, 0);
+    scene.test = cylinder2;
+
+scene.interactive_objects.push(cylinder2);
+//player.setCameraOnPlayer(false);
+
+setTimeout(function() {
+
+Promise.all([
+   // BABYLON.SceneLoader.ImportMesh(null,"./assets/players/Mage/", "Mage.glb", scene, function (meshes,particles,skeltons)  {
+  BABYLON.SceneLoader.ImportMesh(null,"./assets/avatar/", "avatar.glb", scene, function (meshes,particles,skeltons)  {
+ 		player.setScene(scene);
+ 	//	player.setCamera(camera)
+
+console.log("meshes");
+ 		player.setModel(meshes);
+
+     console.log("controls");
+    player.addcontrols(inputMap);
+
+	player.setMovementMode('keyboard');
+
+	player.setMessages(messages);
+ //var camera = player.setCameraOnPlayer();
+
+
+
+    }),
+
+]).then(() => {
+
+});
+
+
+}, 1000);
+
+
+
+
+
+
+scene.registerBeforeRender(() => {
+  if(player.isReady()){
+      player.player_before_render();
+      }
+          
+	});
+
+    // Game/Render loop
+    scene.onBeforeRenderObservable.add(()=>{
+
+      if(player.isReady()){
+      player.update();
+      player.player_move();
+
+      var centerPlayer = player.hitbox.position.y + 2;
+			 _camRoot.position = new BABYLON.Vector3.Lerp(_camRoot.position, new BABYLON.Vector3(player.hitbox.position.x , centerPlayer + 10, player.hitbox.position.z - 10), 0.4);
+            
+      }
+  
+    })
+
+
+    scene.mouse_down = false;
+    scene.can_mouse_check = true;
+    scene.can_mouse_check_timer = false;
+    scene.onBeforePhysicsObservable.add(function() {
+     
+     if(player.isReady()){
+ fear_types.physicsupdate();
+ }
+
+    });
+
+/*
+    scene.onPointerObservable.add((pointerInfo) => {
+
+      if(scene.can_mouse_check){
+
+        if(scene.mouse_down)
+        {
+            //console.log("moving mouse!!");
+            var direction =  get_screen_control_move_direction(pointerInfo)
+            //console.log(direction);
+            if(player.direction != direction) {
+           // player.move_in_direction(direction); 
+
+            }
+        }
+        scene.can_mouse_check = false;
+      } else {
+          if(!scene.can_mouse_check_timer)
+          {
+            scene.can_mouse_check_timer = true;
+            setTimeout(() => {
+              scene.can_mouse_check = true;
+              scene.can_mouse_check_timer = false;
+          }, 500);
+        }
+      }
+
+
+    },BABYLON.PointerEventTypes.POINTERMOVE);
+
+
+    scene.onPointerObservable.add((pointerInfo) => {
+           // console.log(pointerInfo);
+          //  console.log(pointerInfo);
+         //   console.log(pointerInfo.pickInfo.pickedPoint);
+         var direction =  get_screen_control_move_direction(pointerInfo)
+
+     // console.log(direction);
+      scene.mouse_down = true;
+
+         //   var point = pointerInfo.pickInfo.pickedPoint;
+        // player.move_in_direction(direction);
+    },BABYLON.PointerEventTypes.POINTERDOWN);
+
+
+
+    scene.onPointerObservable.add((pointerInfo) => {
+           // console.log(pointerInfo);
+            //console.log(pointerInfo);
+            console.log("POINTER UP!");
+        //  player.stop_moving();
+
+          scene.mouse_down = false;
+
+         //   var point = pointerInfo.pickInfo.pickedPoint;
+         //   player.set_position(point.x,point.z);
+    },BABYLON.PointerEventTypes.POINTERUP);
+
+
+
+ scene.onPointerObservable.add (function(evt) {
+  //console.log(evt);
+  },BABYLON.PointerEventTypes.POINTERDOWN)
+*/
+scene.clearCachedVertexData();
+scene.cleanCachedTextureBuffer();
+
+    return scene;
+
+};
+
+
+
+
+window.addEventListener('click',function(){
+//when you click the window the game will unmute
+ // document.getElementById('babylonUnmuteIconBtn').click();
+});
+
+
+            // call the createScene function
+            var scene = createScene();
+           //var fearscene1 = createFearScene1();
+            // run the render loop
+
+      
+            sceneManager.add_scene('level','1',scene);
+           // sceneManager.add_scene('fear','fearscene1',fearscene1);
+            sceneManager.set_active_scene('level','1')
+
+            engine.runRenderLoop(function(){
+               // scene.render();
+                //fearscene1.render();
+                if(player.isReady()){
+                sceneManager.render_active_scene();
+                }
+            });
+
+            // the canvas/window resize event handler
+            window.addEventListener('resize', function(){
+                engine.resize();
+            });
+        });
+
+</script>
+
+
+
+</html>

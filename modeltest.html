@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<script src="/ihh/babylon/babylon.max.js"></script>
+<script src="/ihh/js/cannon.js"></script>
+<script src="/ihh/js/functions.js"></script>
+
+<!--<script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>-->
+<script src="/ihh/babylon/loaders/babylonjs.loaders.min.js"></script>
+<script src="/ihh/babylon/gui/babylon.gui.min.js"></script>
+<!--<script src="/babylon/materialsLibrary/babylonjs.materials.min.js"></script>
+<script src="/babylon/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+<script src="/babylon/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+<script src="/babylon/serializers/babylonjs.serializers.min.js"></script>
+<script src="/babylon//nodeEditor/babylon.nodeEditor.js"></script>-->
+<link rel="stylesheet" type="text/css" href="/ihh/css/fearinventory.css">
+<link rel="stylesheet" type="text/css" href="/ihh/css/inventory.css">
+<link rel="stylesheet" type="text/css" href="/ihh/css/icons.css">
+
+
+
+<style>
+            html, body {
+            overflow: hidden;
+            width   : 100%;
+            height  : 100%;
+            margin  : 0;
+            padding : 0;
+        }
+
+        #renderCanvas {
+            width   : 100%;
+            height  : 100%;
+    
+            touch-action: none;
+        }
+</style>
+</head>
+<body id="body">
+
+<!--
+<div class="leftright"></div>
+<div class="updown"></div>
+<div class="touchcontrolsdisplaytop">
+<div class="topleft"></div>
+<div class="topright"></div>
+</div>
+<div class="touchcontrolsdisplaybottom">
+  <div class="bottomleft"></div>
+  <div class="bottomright"></div>
+  </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <canvas id="renderCanvas"></canvas>
+
+</body>
+<script type='module'> 
+
+</script>
+
+<script type='module' >
+
+function getAnim(name,animations){
+
+var varreturn = null;
+    animations.forEach(function(anim,index){
+        
+                    if(anim.name == name) {
+                    
+                        varreturn = anim;
+                    }
+            
+        });
+    return varreturn;
+}
+
+
+
+
+window.addEventListener('DOMContentLoaded', function(){
+            // get the canvas DOM element
+            var canvas = document.getElementById('renderCanvas');
+
+            // load the 3D engine
+            var engine = new BABYLON.Engine(canvas, true);
+
+       
+
+var createScene = function () {
+
+
+    // This creates a basic Babylon Scene object (non-mesh)
+    var scene = new BABYLON.Scene(engine);
+
+    // This creates and positions a free camera (non-mesh)
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+    // This targets the camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+
+    // Our built-in 'sphere' shape.
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
+
+    // Move the sphere upward 1/2 its height
+    sphere.position.y = 1;
+
+    sphere.material = new BABYLON.StandardMaterial("myMaterial", scene);
+    sphere.material.diffuseTexture = new BABYLON.VideoTexture("video", "./assets/video/test.mp4", scene, true);
+
+    var videoTexture = sphere.material.diffuseTexture;
+
+
+    scene.onPointerDown = function () { 
+  videoTexture.video.play();
+}
+
+
+    BABYLON.SceneLoader.ImportMesh(null,"./assets/feartypes/crystal/red/redvirus/", "redvirus.glb", scene, function (meshes,particles,skeltons)  {
+
+meshes.forEach(function(mesh,index){
+
+mesh.isVisible = true;
+console.log(mesh.name);
+
+console.log(mesh.material);
+console.log(mesh);
+if(mesh.material){
+mesh.material.albedoTexture.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST_MIPLINEAR);
+}
+if(mesh.name == '__root__') {
+//  var hitbox = BABYLON.MeshBuilder.CreateCylinder("playerhitbox", {height: 2, diameter: 2}, scene);
+//   hitbox.position = new BABYLON.Vector3(0, 5, -3);
+
+} else {
+
+    /*
+    console.log("updated texture")
+    var material = mesh.material;
+
+    fearcrystal = mesh;
+
+    mesh.position = new BABYLON.Vector3(5,3,-10);
+    material.samplingMode = BABYLON.Texture.NEAREST_SAMPLINGMODE
+         //console.log("UPDATED SAMPLING MODE");
+         var turl = material.albedoTexture.url;
+        console.log(turl);
+
+         var texture = new BABYLON.Texture(turl, scene);
+        
+         texture.onLoadObservable.add(() => {
+        texture.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST_MIPLINEAR);
+    });
+         texture.anisotropicFilteringLevel = 0;
+         var mat = new BABYLON.StandardMaterial("groundmat", scene);
+         mat.diffuseTexture = texture;
+         mat.samplingMode = BABYLON.Texture.NEAREST_SAMPLINGMODE
+         mesh.material = mat;
+         mesh.scaling.x = 	mesh.scaling.y = 	mesh.scaling.z = .5;
+
+*/
+}
+
+});
+
+
+
+console.log(getAnim('idle',scene.animationGroups).play());	
+});
+
+
+
+
+    // Our built-in 'ground' shape.
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+
+    return scene;
+
+
+
+}
+
+
+   
+
+
+
+
+
+window.addEventListener('click',function(){
+//when you click the window the game will unmute
+ // document.getElementById('babylonUnmuteIconBtn').click();
+});
+
+
+            // call the createScene function
+            var scene = createScene();
+           //var fearscene1 = createFearScene1();
+            // run the render loop
+
+      
+    
+
+            engine.runRenderLoop(function(){
+               scene.render();
+       
+            });
+
+            // the canvas/window resize event handler
+            window.addEventListener('resize', function(){
+                engine.resize();
+            });
+        });
+
+</script>
+
+
+
+</html>

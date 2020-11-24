@@ -1,0 +1,343 @@
+
+
+@media only screen and (max-width: 500px) {
+
+  #inventory
+  {
+    display: none;
+  }
+  ul.inventory-list
+  {
+
+  display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  
+  grid-template-columns: 75px 75px 75px 75px 75px 75px 75px 75px;
+  grid-template-rows: 80px 80px;
+  }
+  ul.inventory-list li.itemslot
+{
+  width: 50px;
+  height: 50px;
+  border: 1px solid #595859;
+ opacity: .8;
+ transition: opacity .5s;
+  background-image: url('/ihh/assets/UI/inventory/fear/fearinventoryitembg.png');
+
+}
+}
+@media only screen and (min-width: 1000px) {
+
+  #inventory
+  {
+    display: block;
+  }
+  ul.inventory-list
+{
+
+  width: 800px;
+  display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  
+  grid-template-columns: 75px 75px 75px 75px 75px 75px 75px 75px;
+  grid-template-rows: 80px 80px;
+}
+ul.inventory-list li.itemslot
+{
+  margin-top: 0px;
+  
+  width: 75px;
+  height: 80px;
+  border: 1px solid #595859;
+ opacity: .8;
+ transition: opacity .5s;
+  background-image: url('/ihh/assets/UI/inventory/fear/fearinventoryitembg.png');
+
+}
+}
+
+
+ul.inventory-list.hidden 
+{
+  display: none;
+}
+
+ul.inventory-list
+{
+  list-style: none;
+  margin: 0;
+  margin-left: -35px;
+}
+
+
+
+ul.inventory-list li.itemslot:hover
+{
+ opacity: 1;
+border: 1px solid gold;
+ transition: opacity .5s;
+ z-index: 1000;
+}
+ul.inventory-list li.itemslot.active 
+{
+   opacity: 1;
+border: 1px solid gold;
+ transition: opacity .5s;
+ z-index: 1000;
+}
+
+
+
+
+
+
+
+
+
+.inventory-display
+{
+  display: flex;
+}
+
+#inventory
+{
+  position: absolute;    
+  display: none;
+  width: 805px;
+  height: 50%;
+
+  background-color:   rgb(26, 0, 26,.95);
+  border-radius: 15px;
+  border: 1px solid var(--dspurple);
+}
+
+#inventory.show
+{
+  display: block;
+}
+
+.inventory-exit-button img
+{
+ width: 100%;
+ height: 20px;
+ margin-top: 5px;
+ margin-left: 5px;
+}
+
+.inventory-exit-button
+{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--dspurple);
+  border-radius: 15px;
+  background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+}
+
+.inventory-exit-button:hover
+{
+  border: 2px solid gold; 
+}
+.inventory-exit-button.selected 
+{
+  border: 2px solid gold; 
+}
+/*Pagination*/
+ul.inventory-pagination
+{
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -115px;
+  margin-top: -10px;
+}
+
+ul.inventory-pagination li 
+{
+list-style: none;
+
+  margin-left: 50px;
+  border: 2px solid var(--dspurple);
+  border-radius: 15px;
+  width: 50px;
+  height: 50px;
+  background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+  opacity: .6;
+  transition: opacity .5s;
+}
+ul.inventory-pagination li:hover
+{
+ opacity: 1;
+  transition: opacity .5s;
+ 
+}
+
+ul.inventory-pagination li img {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+ul.inventory-pagination li.active 
+{
+  border: 2px solid gold;
+  opacity: 1;
+  transition: opacity .5s;
+}
+
+
+/*TYPES*/
+ul.inventory-type-menu
+{
+  list-style: none;
+   margin: 0;
+}
+ul.inventory-type-menu li 
+{
+list-style: none;
+
+  margin: 0;
+  border: 2px solid var(--dspurple);
+  border-radius: 15px;
+  width: 50px;
+  height: 50px;
+  background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+  opacity: .6;
+  transition: opacity .5s;
+}
+ul.inventory-type-menu li:hover
+{
+ opacity: 1;
+  transition: opacity .5s;
+ 
+}
+
+ul.inventory-type-menu li img {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+ul.inventory-type-menu li.selected 
+{
+
+  border: 2px solid gold;
+  opacity: 1;
+  transition: opacity .5s;
+
+}
+ul.inventory-type-menu li.active 
+{
+
+  opacity: 1;
+  transition: opacity .5s;
+
+}
+
+        #fear-type-inventory-menu{
+          position: absolute;
+        
+          top:20px;
+          display: none;
+          width: 600px;
+          height: 80%;
+          padding-left: 20px;
+          background-color:   rgb(26, 0, 26,.95);
+          border-radius: 15px;
+          border: 1px solid var(--dspurple);
+        }
+
+         #fear-type-inventory-menu.show{
+          display: block;
+        }
+.invetory-list-item-image
+{
+  width: 75px;
+  height: 75px;
+
+  margin-top: 2px;
+ 
+}
+.invetory-list-item-image img {
+  width: 74px;
+  height: 74px;
+}
+.inventory-list-item-info
+{
+  vertical-align: top;
+color: white;
+  margin-top: 2px;
+  padding: 1px;
+  font-size: 12px;
+}
+.inventory-list-item-info strong{
+  font-size: 14px;
+}
+
+.inventory-item-grid{
+   display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  grid-template-columns: 75px 125px;
+}
+
+.inventory-amount
+{
+color: white;
+    vertical-align: bottom;
+
+    position: absolute;
+    margin-left: 100px;
+    margin-top: 29px;
+
+    padding: 5px;
+    font-size: 15px;
+}
+
+
+.invetory-list-item-image
+{
+  width: 75px;
+  height: 75px;
+
+  margin-top: 2px;
+ 
+}
+.invetory-list-item-image img {
+  width: 74px;
+  height: 74px;
+}
+
+ul.inventory-item-stat-effects
+{
+  display: grid;
+  grid-column-gap: 2px;
+  grid-row-gap: 0px;
+  grid-template-columns: 50px 50px;
+  list-style: none;
+  margin-left: -30px;
+
+}
+li.inventory-stat-effect-display
+{
+  display: flex;
+  border: 2px solid var(--dspurple);
+  border-radius: 15px;
+
+  background-image: linear-gradient(to bottom right,#1a1a1a,var(--dspurple), #1a1a1a);
+
+}
+
+/*Items*/
+
+.inventory-lightweapons-swords-blue
+{
+ background-image: url('/ihh/assets/UI/inventory/lightweapons/swords/bluelightsword.png');
+}
+
+
+
+

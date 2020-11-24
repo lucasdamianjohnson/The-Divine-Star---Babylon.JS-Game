@@ -1,0 +1,138 @@
+
+
+
+span.stats-strength-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/strength.png');
+}
+
+span.stats-accuracy-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/accuracy.png');
+}
+
+span.stats-armor-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/armor.png');
+}
+
+span.stats-speed-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/speed.png');
+}
+
+span.stats-luck-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/luck.png');
+}
+
+span.stats-flexibility-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/flexibility.png');
+}
+
+span.stats-wisdom-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/wisdom.png');
+}
+
+span.stats-intelligence-icon
+{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/stats/intelligence.png');
+}
+
+
+span.frequency-icon-red
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/red.png');
+}
+span.frequency-icon-orange
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/orange.png');
+}
+span.frequency-icon-yellow
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/yellow.png');
+}
+span.frequency-icon-green
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/green.png');
+}
+span.frequency-icon-blue
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/blue.png');
+}
+span.frequency-icon-ultraviolet
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/ultraviolet.png');
+}
+span.frequency-icon-pink
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/pink.png');
+}
+span.frequency-icon-white
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/frequncies/white.png');
+}
+span.small-mana-icon
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/mana.png');
+}
+span.small-loveimpact-icon
+{
+  width: 12px;
+  height:12px;
+  display: inline-block;
+  background-image: url('/ihh/assets/UI/icons/loveimpact.png');
+}
